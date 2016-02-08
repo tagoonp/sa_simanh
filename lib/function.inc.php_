@@ -1,0 +1,484 @@
+<?php
+function calAdm($inst,$db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE username in 
+		(SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and confirm_status = 1";
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}
+		
+}
+
+function calSumAdm($db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1";
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}
+		
+}
+
+function calDel($inst,$db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord a inner join ".substr(strtolower($tbf),0,-2)."delivery b on a.record_id = b.record_id WHERE a.username in 
+		(SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and a.confirm_status = 1";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}
+}
+
+function calSumDel($db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord a inner join ".substr(strtolower($tbf),0,-2)."delivery b on a.record_id = b.record_id WHERE a.confirm_status = 1";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}
+}
+
+function calBirth($inst,$db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE username in (SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and confirm_status = 1)
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumBirth($db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1)
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumBirthReport($db,$tbf,$case){
+	$condition = '';
+		switch($case){
+			case 1:	$condition = " and birth_wieght between '500' and '999'"; break;
+			case 2:	$condition = " and birth_wieght between '1000' and '1499'"; break;
+			case 3:	$condition = " and birth_wieght between '1500' and '1999'"; break;
+			case 4:	$condition = " and birth_wieght between '2000' and '2499'"; break;
+			case 5:	$condition = " and birth_wieght > '2500'"; break;
+			default : $condition = " ";
+		}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1) $condition
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumLBirthReport($db,$tbf,$case){
+	$condition = '';
+		switch($case){
+			case 1:	$condition = " and birth_wieght between '500' and '999'"; break;
+			case 2:	$condition = " and birth_wieght between '1000' and '1499'"; break;
+			case 3:	$condition = " and birth_wieght between '1500' and '1999'"; break;
+			case 4:	$condition = " and birth_wieght between '2000' and '2499'"; break;
+			case 5:	$condition = " and birth_wieght > '2500'"; break;
+			default : $condition = " ";
+		}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE alive = 1 and record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1) $condition
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumStillbornReport($db,$tbf,$case,$stil){
+	$condition = '';
+	$condition2 = '';
+		switch($case){
+			case 1:	$condition = " and birth_wieght between '500' and '999'"; break;
+			case 2:	$condition = " and birth_wieght between '1000' and '1499'"; break;
+			case 3:	$condition = " and birth_wieght between '1500' and '1999'"; break;
+			case 4:	$condition = " and birth_wieght between '2000' and '2499'"; break;
+			case 5:	$condition = " and birth_wieght > '2500'"; break;
+			default : $condition = " ";
+		}
+		
+		switch($stil){
+			case 1: 	$condition2 = " and alive = 0 and stillbirth = 1";
+			case 2: 	$condition2 = " and alive = 0 and stillbirth = 2";	
+			default: 	$condition2 = " and alive = 0 and stillbirth = 0";
+		}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1) $condition $condition2
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumNeonatalReport($db,$tbf,$case){
+	$condition = '';
+	$condition2 = '';
+		switch($case){
+			case 1:	$condition = " birth_wieght between '500' and '999'"; break;
+			case 2:	$condition = " birth_wieght between '1000' and '1499'"; break;
+			case 3:	$condition = " birth_wieght between '1500' and '1999'"; break;
+			case 4:	$condition = " birth_wieght between '2000' and '2499'"; break;
+			case 5:	$condition = " birth_wieght > '2500'"; break;
+			default : $condition = " 1";
+		}
+
+		//$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in 
+		//(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1) $condition $condition2
+		//";
+		
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."complication_delivery WHERE neo = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE $condition) and record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1)
+		";
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumBOAReport($db,$tbf){
+	$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord a inner join ".substr(strtolower($tbf),0,-2)."obstetric b 
+			   on a.record_id = b.record_id 
+			   WHERE a.confirm_status = 1 and b.bba = 1";
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}	
+}
+
+function calSumMODReport($db,$tbf,$case){
+	$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord a inner join ".substr(strtolower($tbf),0,-2)."delivery b 
+			   on a.record_id = b.record_id 
+			   WHERE a.confirm_status = 1 and b.mode_del = '".$case."'";
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}	
+}
+
+//Multiple pregnancies
+function calSumPregReport($db,$tbf,$case){
+	switch($case){
+		//Pregnancies
+		case 1: $strSQL = "SELECT record_id, count(*) FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1) GROUP BY record_id HAVING COUNT(*) > 1";
+
+			   ;break;
+		//Neonates
+		case 2: $strSQL = "SELECT record_id, count(*) FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1) GROUP BY record_id HAVING COUNT(*) > 1";
+		break;
+	}
+	
+	
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			if($case==1){
+				print sizeof($resultSum);
+			}else{
+				$val = 0;
+				foreach($resultSum as $v){
+					$val += $v['count(*)']; 	
+				}
+				print $val;
+			}
+				
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}	
+}
+
+function calSumAODReport($db,$tbf,$case){
+	$condition = '';
+	$condition2 = '';
+		switch($case){
+			case 1:	$condition = " birth_wieght between '500' and '999'"; break;
+			case 2:	$condition = " birth_wieght between '1000' and '1499'"; break;
+			case 3:	$condition = " birth_wieght between '1500' and '1999'"; break;
+			case 4:	$condition = " birth_wieght between '2000' and '2499'"; break;
+			case 5:	$condition = " birth_wieght > '2500'"; break;
+			default : $condition = " 1";
+		}
+		
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."other_postnatal WHERE death = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE $condition) and record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1)
+		";
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function callBirth($inst,$db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE alive = 1 and record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE username in (SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and confirm_status = 1)
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumlBirth($db,$tbf){
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE alive = 1 and record_id in 
+		(SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1)
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calRefer($inst,$db,$tbf){
+		$strSQL = "SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE username in (SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and confirm_status = 1 and refer_in_status = 1
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}		
+}
+
+function calSumRefer($db,$tbf){
+		$strSQL = "SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1 and refer_in_status = 1
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}		
+}
+
+function calComplication($inst,$db,$tbf,$com){
+	$c = '';
+	switch($com){
+		case 1: $c = 'il';break;
+		case 2: $c = 'ah';break;
+		case 3: $c = 'ph';break;
+		case 4: $c = 'spe';break;
+		case 5: $c = 'ecl';break;
+		case 6: $c = 'prl';break;
+		case 7: $c = 'rup';break;
+		case 8: $c = 'sep';break;
+		case 9: $c = 'opl';break;
+		case 10: $c = 'ret';break;
+		case 11: $c = 'mrp';break;
+		case 12: $c = 'md';break;
+		case 13: $c = 'stil';break;
+		case 14: $c = 'neo';break;
+		case 15: $c = 'pret';break;
+		case 16: $c = 'lbw';break;
+	}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."complication_delivery WHERE $c = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE username in (SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and confirm_status = 1 )
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}		
+}
+
+//Morbidity marker
+function calSumComplication($db,$tbf,$com){
+	$c = '';
+	switch($com){
+		case 1: $c = 'il';break;
+		case 2: $c = 'ah';break;
+		case 3: $c = 'ph';break;
+		case 4: $c = 'spe';break;
+		case 5: $c = 'ecl';break;
+		case 6: $c = 'prl';break;
+		case 7: $c = 'rup';break;
+		case 8: $c = 'sep';break;
+		case 9: $c = 'opl';break;
+		case 10: $c = 'ret';break;
+		case 11: $c = 'mrp';break;
+		case 12: $c = 'md';break;
+		case 13: $c = 'stil';break;
+		case 14: $c = 'neo';break;
+		case 15: $c = 'pret';break;
+		case 16: $c = 'lbw';break;
+	}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."complication_delivery WHERE $c = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1 )
+		";
+		
+		if($com == 17){
+			$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."outcome WHERE rbm = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1)
+		";
+		}
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}		
+}
+
+function calComplicationPost($inst,$db,$tbf,$com){
+	$c = '';
+	switch($com){
+		case 1: $c = 'pos_com1';break;
+		case 2: $c = 'pos_com2';break;
+		case 3: $c = 'pos_com3';break;
+		case 4: $c = 'pos_com4';break;
+	}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."postnatal WHERE $c = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE username in (SELECT username FROM ".substr(strtolower($tbf),0,-2)."userdescription WHERE institute_id = '".$inst."') and confirm_status = 1 )
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}		
+}
+
+function calSumComplicationPost($db,$tbf,$com){
+	$c = '';
+	switch($com){
+		case 1: $c = 'pos_com1';break;
+		case 2: $c = 'pos_com2';break;
+		case 3: $c = 'pos_com3';break;
+		case 4: $c = 'pos_com4';break;
+	}
+		$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."postnatal WHERE $c = '1' and record_id in (SELECT record_id FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1 )
+		";
+		//print $strSQL;
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";	
+		}		
+}
+
+//Parity
+function calSumParityReport($db,$tbf,$case){
+	$condition = '';
+	switch($case){
+		//Primiparae
+		case 1: $condition  = " and a.parity <= 1";break;
+		//Multiparae
+		case 2: $condition  = " and a.parity between 2 and 4";break;
+		//Grand multiparae 
+		case 3: $condition  = " and a.parity > 4";break;
+	}
+	
+	$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."obstetric a inner join ".substr(strtolower($tbf),0,-2)."registerrecord b
+				on a.record_id = b.record_id WHERE b.confirm_status = 1 $condition";
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}	
+}
+
+//Marternal age
+function calSumMaternalAgeReport($db,$tbf,$case){
+	$condition = '';
+	switch($case){
+		//Primiparae
+		case 1: $condition  = " and p_cage < 18";break;
+		//Multiparae
+		case 2: $condition  = " and p_cage between 18 and 19";break;
+		//Grand multiparae 
+		case 3: $condition  = " and p_cage between 20 and 34";break;
+		//Grand multiparae 
+		case 4: $condition  = " and p_cage > 34";break;
+	}
+	
+	$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."registerrecord WHERE confirm_status = 1 $condition";
+		
+		//print $strSQL;
+
+		$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}	
+}
+
+function calSumHIVReport($db,$tbf,$col,$val){
+	$strSQL = "SELECT * FROM ".substr(strtolower($tbf),0,-2)."obstetric a inner join ".substr(strtolower($tbf),0,-2)."registerrecord b
+				on a.record_id = b.record_id WHERE b.confirm_status = 1 and $col = $val";
+	$resultSum = $db->select($strSQL,false,true);
+		if($resultSum){
+			print sizeof($resultSum);	
+		}else{
+			print "<font color=\"#CCCCCC\">0</font>";		
+		}
+}
+
+?>

@@ -1,0 +1,48 @@
+html, body{
+  padding: 0;
+  margin: 0;
+}
+
+table {border-collapse: collapse; width: 100%; border: 0;}
+
+.td-left-padding{
+  padding-left: 20px;
+  color: #06c;
+}
+
+td{
+  vertical-align: top;
+}
+
+.comp_table td{
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.comp_table2 td{
+  padding-bottom: 0px;
+  padding-top: 20px;
+  vertical-align: middle;
+}
+
+.pdl{
+  padding-left: 10px;
+}
+
+.btn-primary{
+  padding: 10px 12px 10px 12px;
+  border:none;
+  border-radius: 5px;
+  background: #06c;
+  color:#fff;
+  cursor: pointer;
+}
+
+.btn-danger{
+  padding: 10px 12px 10px 12px;
+  border:none;
+  border-radius: 5px;
+  background: red;
+  color:#fff;
+  cursor: pointer;
+}
