@@ -89,7 +89,6 @@ $resultPart1 = $db->select($strSQL,false,true);
 <?php
 print "<tr>";
 foreach($colname as $v){
-
 	?>
 			<td style="white-space: nowrap"><?php print $v;?></td>
 	<?php

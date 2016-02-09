@@ -113,7 +113,7 @@ $(function(){
 			}
 		}
 
-		window.location = './php/export_xls.php?sdate=' + $('#sdate').val() + '&edate=' + $('#edate').val() + '&hospital=' + $('#insts').val();
+		window.location = './php/export_txt.php?sdate=' + $('#sdate').val() + '&edate=' + $('#edate').val() + '&hospital=' + $('#insts').val();
 	});
 
 	$('#view_btn7').click(function(){
